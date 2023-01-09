@@ -1,33 +1,19 @@
 
 const { Configuration, OpenAIApi } = require("openai");
 
- 
-// function apiWrapper (artist1, artist2, artist3) {
-//   const body = {
-//     let promise = new Promise(function(resolve, reject) {
-//       let request = new XMLHttpRequest();
-//       const configuration = new Configuration({
-//         apiKey: process.env.OPENAI_API_KEY,
-//       });
-//       const openai = new OpenAIApi(configuration); 
+debugger;
 
-//       prompt: `${artist1} ${artist2} ${artist3}`,
-//       if ()
-//     })
-//   }
-// }
 
 const configuration = new Configuration({
   apiKey: process.env.OPENAI_API_KEY,
 });
 const openai = new OpenAIApi(configuration);
-debugger;
-function makeApiRequest(openapi, artist1, artist2, artist3) {
+function makeApiRequest(artist1, artist2, artist3) {
   const xml = new XMLHttpRequest();
   xml.open("POST", "https://api.openai.com/v1/completions");
   xml.setRequestHeader("Content-Type", "application/json");
   xml.setRequestHeader("Authorization", `Bearer ${process.env.OPENAI_API_KEY}`);
-
+  
   const payload = {
     model: "text-davinci-003",
     prompt: `Give me a list of 5 recommended musical artists based off of my top 3 picks. Top 3 Picks: ${artist1}, ${artist2}, ${artist3}\n`,
@@ -38,13 +24,46 @@ function makeApiRequest(openapi, artist1, artist2, artist3) {
     presence_penalty: 0.6,
     stop: [" Human:", " AI:"],
   };
-
+  
   xml.send(JSON.stringify(payload));
   xml.addEventListener("load", () => {
-    const response = JSON.parse(xml.responseText);
+    const response = JSON.parse(xml.response.choices[0].text);
     console.log(response);
   });
 }
+function handleSubmit(event){
+  event.preventDefault();
+  let artist1 = document.getElementById("artist1").value
+  let artist2 = document.getElementById("artist2").value
+  let artist3 = document.getElementById("artist3").value
+  makeApiRequest(artist1, artist2, artist3);
+  
+}
+window.addEventListener("load", function() {
+
+  document.querySelector('form').addEventListener("submit", handleSubmit);
+});
+// function handleSubmit(event){
+//   event.preventDefault();
+//   try{
+//     makeApiRequest();
+//   } catch{
+//   }
+    // function apiWrapper (artist1, artist2, artist3) {
+      //   const body = {
+        //     let promise = new Promise(function(resolve, reject) {
+          //       let request = new XMLHttpRequest();
+          //       const configuration = new Configuration({
+            //         apiKey: process.env.OPENAI_API_KEY,
+            //       });
+            //       const openai = new OpenAIApi(configuration); 
+            
+            //       prompt: `${artist1} ${artist2} ${artist3}`,
+            //       if ()
+            //     })
+            //   }
+            // }
+// }
 
 // const response = await openai.createCompletion(body, {
 //   model: "text-davinci-003",
