@@ -1,7 +1,7 @@
 
 const { Configuration, OpenAIApi } = require("openai");
 
-
+ 
 // function apiWrapper (artist1, artist2, artist3) {
 //   const body = {
 //     let promise = new Promise(function(resolve, reject) {
