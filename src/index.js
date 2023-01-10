@@ -2,40 +2,75 @@
 const { Configuration, OpenAIApi } = require("openai");
 
 debugger;
-
+process.env
+console.log(process.env.OPENAI_API_KEY);
 
 const configuration = new Configuration({
   apiKey: process.env.OPENAI_API_KEY,
 });
 const openai = new OpenAIApi(configuration);
+
+
 function makeApiRequest(artist1, artist2, artist3) {
-  const xml = new XMLHttpRequest();
-  xml.open("POST", "https://api.openai.com/v1/completions");
-  xml.setRequestHeader("Content-Type", "application/json");
-  xml.setRequestHeader("Authorization", `Bearer ${process.env.OPENAI_API_KEY}`);
-  
-  const payload = {
-    model: "text-davinci-003",
-    prompt: `Give me a list of 5 recommended musical artists based off of my top 3 picks. Top 3 Picks: ${artist1}, ${artist2}, ${artist3}\n`,
-    temperature: 1.5,
-    max_tokens: 150,
-    top_p: 1,
-    frequency_penalty: 0,
-    presence_penalty: 0.6,
-    stop: [" Human:", " AI:"],
-  };
-  
-  xml.send(JSON.stringify(payload));
-  xml.addEventListener("load", () => {
-    const response = JSON.parse(xml.response.choices[0].text);
-    console.log(response);
+  let promise = new Promise(function(resolve, reject) {
+    let xml = new XMLHttpRequest();
+    xml.addEventListener("loadend", () => {
+      const response = JSON.parse(xml.response);
+      console.log(response.choices[0].text);
+      if (xml.status === 200) {
+        resolve([response, artist1, artist2, artist3]);
+      } else {
+        reject([xml, response, artist1, artist2, artist3])
+      }
+    });
+    xml.open("POST", "https://api.openai.com/v1/completions");
+    xml.setRequestHeader("Content-Type", "application/json");
+    xml.setRequestHeader("Authorization", `Bearer ${process.env.OPENAI_API_KEY}`);
+    
+    const payload = {
+      model: "text-davinci-003",
+      prompt: `Give me a list of 5 recommended musical artists based off of my top 3 picks. Top 3 Picks: ${artist1}, ${artist2}, ${artist3}\n`,
+      temperature: 1.5,
+      max_tokens: 150,
+      top_p: 1,
+      frequency_penalty: 0,
+      presence_penalty: 0.6,
+      stop: [" Human:", " AI:"],
+    };
+    console.log(xml);
+    xml.send(JSON.stringify(payload));
   });
 }
+
+// function makeApiRequest(artist1, artist2, artist3) {
+//   const xml = new XMLHttpRequest();
+//   xml.open("POST", "https://api.openai.com/v1/completions");
+//   xml.setRequestHeader("Content-Type", "application/json");
+//   xml.setRequestHeader("Authorization", `Bearer ${process.env.OPENAI_API_KEY}`);
+  
+//   const payload = {
+//     model: "text-davinci-003",
+//     prompt: `Give me a list of 5 recommended musical artists based off of my top 3 picks. Top 3 Picks: ${artist1}, ${artist2}, ${artist3}\n`,
+//     temperature: 1.5,
+//     max_tokens: 150,
+//     top_p: 1,
+//     frequency_penalty: 0,
+//     presence_penalty: 0.6,
+//     stop: [" Human:", " AI:"],
+//   };
+//   console.log(xml);
+//   xml.send(JSON.stringify(payload));
+//   xml.addEventListener("loadend", () => {
+//     const response = JSON.parse(xml.response);
+//     console.log(response.choices[0].text);
+//   });
+// }
+
 function handleSubmit(event){
   event.preventDefault();
-  let artist1 = document.getElementById("artist1").value
-  let artist2 = document.getElementById("artist2").value
-  let artist3 = document.getElementById("artist3").value
+  let artist1 = document.getElementById("artist1").value;
+  let artist2 = document.getElementById("artist2").value;
+  let artist3 = document.getElementById("artist3").value;
   makeApiRequest(artist1, artist2, artist3);
   
 }
@@ -137,3 +172,5 @@ window.addEventListener("load", function() {
 // }, function(error, response) {
 //   console.log(response.choices[0].text);
 // });
+
+
