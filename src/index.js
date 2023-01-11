@@ -17,11 +17,11 @@ function makeApiRequest(artist1, artist2, artist3) {
     let xml = new XMLHttpRequest();
     xml.addEventListener("loadend", () => {
       const response = JSON.parse(xml.response);
-      console.log(response.choices[0].text);
+      // console.log(response.choices[0].text);
       if (xml.status === 200) {
         resolve([response, artist1, artist2, artist3]);
       } else {
-        reject([xml, response, artist1, artist2, artist3])
+        reject([response, artist1, artist2, artist3])
       }
     });
     xml.open("POST", "https://api.openai.com/v1/completions");
@@ -44,8 +44,8 @@ function makeApiRequest(artist1, artist2, artist3) {
   debugger;
   promise.then(function(response){
     printElements(response);
-  }, function(errorMessage){
-    printError(errorMessage);
+  }, function(response){
+    printError(response);
   });
 }
 
@@ -75,8 +75,10 @@ function makeApiRequest(artist1, artist2, artist3) {
 function printElements(response){
   document.getElementById("showResponse").innerText = `${response[0].choices[0].text}`
 }
-function printError(error){
-  document.getElementById("showResponse").innerText = `${error.message}`
+function printError(response){
+
+  document.getElementById("showResponse").innerText = `There was an error: ${response[0].error.message}`;
+  console.log(response[0].error.message);
 }
 function handleSubmit(event){
   event.preventDefault();
