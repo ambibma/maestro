@@ -1,32 +1,37 @@
-
-# Template Repo
+# Maestro
 ---
-#### By Ambi Hidalgo 
+#### By Ambi Hidalgo & Ariel Doyle
 ###### ambio.pk@gmail.com
+###### ariel.rose.garrett@gmail.com
+
 
 ---
 
-####  Template Repo
-Designed to be a basic node/npm template for students at epicodus at a specific version
-This Tempalte repo was create with 
-node version 16.18.1
-npm version 8.19.2
+####  Maestro
+Utilizing openAI api's tooling, Maestro will generate new artists to listen to! Just enter 3 of your favorite artists and recieve a response!
 
 ## Technologies Used
-* node
+* openAI Davinci 3 model
+* Node
 * npm
+* Webpack
+* Jest
+* Babel
+* EsLint
 * Javascript
 * CSS
 * HTML
 
 ## Setup/Installation Requirements
 
-* Clone this repository (https://github.com/ambibma/template-repo)
-* using terminal or gitbash navigate to template-repo repository file
+* Clone this repository (https://github.com/ambibma/maestro)
+* using terminal or gitbash navigate to maestro repository file
 * Once in the repo file 
-    *  npm install
-    *  npm run build
-
+```
+    $ npm install
+    $ npm run build
+    $ npm run start
+```
 ## Known Bugs
 
 * No known bugs at the moment
@@ -36,5 +41,3 @@ send bug concerns to ambi.pk@gmail.com
 
 
 Copyright (c) Ambi Hidalgo 2022
-
-## Tests for Business Logic
