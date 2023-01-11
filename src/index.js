@@ -1,7 +1,7 @@
 
 const { Configuration, OpenAIApi } = require("openai");
 
-debugger;
+
 process.env
 console.log(process.env.OPENAI_API_KEY);
 
@@ -9,6 +9,7 @@ const configuration = new Configuration({
   apiKey: process.env.OPENAI_API_KEY,
 });
 const openai = new OpenAIApi(configuration);
+
 
 
 function makeApiRequest(artist1, artist2, artist3) {
@@ -29,16 +30,22 @@ function makeApiRequest(artist1, artist2, artist3) {
     
     const payload = {
       model: "text-davinci-003",
-      prompt: `Give me a list of 5 recommended musical artists based off of my top 3 picks. Top 3 Picks: ${artist1}, ${artist2}, ${artist3}\n`,
-      temperature: 1.5,
-      max_tokens: 150,
+      prompt: `Give me a list of 5 recommended musical artists based off of my top 3 picks of ${artist1}, ${artist2}, ${artist3}\n`,
+      temperature: 1.2,
+      max_tokens: 100,
       top_p: 1,
       frequency_penalty: 0,
-      presence_penalty: 0.6,
+      presence_penalty: 0,
       stop: [" Human:", " AI:"],
     };
     console.log(xml);
     xml.send(JSON.stringify(payload));
+  });
+  debugger;
+  promise.then(function(response){
+    printElements(response);
+  }, function(errorMessage){
+    printError(errorMessage);
   });
 }
 
@@ -65,7 +72,12 @@ function makeApiRequest(artist1, artist2, artist3) {
 //     console.log(response.choices[0].text);
 //   });
 // }
-
+function printElements(response){
+  document.getElementById("showResponse").innerText = `${response[0].choices[0].text}`
+}
+function printError(error){
+  document.getElementById("showResponse").innerText = `${error.message}`
+}
 function handleSubmit(event){
   event.preventDefault();
   let artist1 = document.getElementById("artist1").value;
