@@ -10,6 +10,7 @@ const configuration = new Configuration({
 });
 const openai = new OpenAIApi(configuration);
 
+
 async function makeApiRequest(url = 'https://api.openai.com/v1/completions', payload) {
 
   const response = await fetch(url, {
@@ -42,8 +43,10 @@ function handleSubmit(event){
   const url = 'https://api.openai.com/v1/completions'
 
   makeApiRequest(url, payload)
-  .then(function(response) {
-    if (!response.ok) {
+.then(function(response) {
+    console.log(response)
+    debugger
+    if (!response.created === Number) {
       const errorMessage = `${response.status} ${response.statusText}`;  
       throw new Error(errorMessage);
     } else {
@@ -55,7 +58,7 @@ function handleSubmit(event){
     console.log(jsonResponse);
   })
   .catch(function(error) {
-    printError(error);
+    printError(error.message);
   });
 }
 
@@ -82,8 +85,8 @@ function printElements(response){
 }
 function printError(response){
 
-  document.getElementById("showResponse").innerText = `There was an error: ${response[0].error.message}`;
-  console.log(response[0].error.message);
+  document.getElementById("showResponse").innerText = `There was an error: ${response[0]}`;
+  console.log(response[0]);
 }
 
 window.addEventListener("load", function() {
@@ -96,7 +99,7 @@ window.addEventListener("load", function() {
 
 
 // function makeApiRequest(artist1, artist2, artist3) {
-  //   let promise = new Promise(function(resolve, reject) {
+//     let promise = new Promise(function(resolve, reject) {
 //     debugger;
 //     let xml = new XMLHttpRequest();
 //     xml.addEventListener("loadend", () => {
